@@ -1,7 +1,7 @@
 {
   "name": "fakenamely",
   "version": "0.1.0",
-  "description": "Official client for the FakeName Generator API — free, keyless fictional identities, addresses and names for tests, fixtures and demos.",
+  "description": "Official client for the FakeName Generator API \u2014 free, keyless fictional identities, addresses and names for tests, fixtures and demos.",
   "keywords": [
     "test-data",
     "fake-data",
@@ -46,6 +46,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit",
