@@ -1,0 +1,60 @@
+{
+  "name": "fakenamely",
+  "version": "0.1.0",
+  "description": "Official client for the FakeName Generator API — free, keyless fictional identities, addresses and names for tests, fixtures and demos.",
+  "keywords": [
+    "test-data",
+    "fake-data",
+    "fixtures",
+    "faker",
+    "mock-data",
+    "synthetic-data",
+    "address-generator",
+    "name-generator",
+    "qa",
+    "api-client"
+  ],
+  "homepage": "https://fakenamely.com/api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinceblock99/fakenamely-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vinceblock99/fakenamely-js/issues"
+  },
+  "license": "MIT",
+  "author": "Vincent (https://fakenamely.com)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "fakenamely": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "sideEffects": false
+}
