@@ -6,7 +6,7 @@
  * (piping into a database, templating) is better done by the caller, and a CLI
  * that tries to do it becomes a worse version of the tools they already have.
  */
-import { FakeNamely, FakeNamelyError } from "./index.js";
+import { Fakenamely, FakenamelyError } from "./index.js";
 import type { FieldType, ValidatorType } from "./types.js";
 
 const COMMANDS = ["identity", "address", "name", "field", "imei", "validate"] as const;
@@ -80,7 +80,7 @@ const asNumber = (value: string | true | undefined): number | undefined => {
   if (value === undefined || value === true) return undefined;
   const n = Number(value);
   if (!Number.isFinite(n)) {
-    throw new FakeNamelyError(`"${value}" is not a number.`, 0, "cli");
+    throw new FakenamelyError(`"${value}" is not a number.`, 0, "cli");
   }
   return n;
 };
@@ -102,7 +102,7 @@ const run = async (argv: readonly string[]): Promise<number> => {
     return 1;
   }
 
-  const client = new FakeNamely({ baseUrl: asString(flags["base-url"]) });
+  const client = new Fakenamely({ baseUrl: asString(flags["base-url"]) });
   const common = {
     count: asNumber(flags.count),
     seed: asString(flags.seed),
@@ -133,7 +133,7 @@ const run = async (argv: readonly string[]): Promise<number> => {
 };
 
 const runJson = async (
-  client: FakeNamely,
+  client: Fakenamely,
   command: Command,
   common: CliCommon,
   flags: Record<string, string | true>,
@@ -142,7 +142,7 @@ const runJson = async (
     const type = asString(flags.type);
     const value = asString(flags.value);
     if (!type || !value) {
-      throw new FakeNamelyError(
+      throw new FakenamelyError(
         "validate needs both --type and --value, e.g. --type iban --value GB82WEST12345698765432",
         0,
         "cli",
@@ -154,7 +154,7 @@ const runJson = async (
   if (command === "field") {
     const type = asString(flags.type);
     if (!type) {
-      throw new FakeNamelyError(
+      throw new FakenamelyError(
         "field needs --type, e.g. --type zip. Supported: name, phone, email, username, password, guid, zip, coordinates, company, imei",
         0,
         "cli",

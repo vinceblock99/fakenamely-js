@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { FakeNamely, FakeNamelyError } from "../src/index.js";
+import { Fakenamely, FakenamelyError } from "../src/index.js";
 
 /**
  * Every test here runs against a stubbed fetch. Hitting the live API from a
@@ -28,7 +28,7 @@ const okEnvelope = (data: unknown) => ({
 
 const stub = (body: unknown, status = 200) => {
   const fetchMock = vi.fn(async () => jsonResponse(body, status));
-  const client = new FakeNamely({ fetch: fetchMock as unknown as typeof fetch });
+  const client = new Fakenamely({ fetch: fetchMock as unknown as typeof fetch });
   return { client, fetchMock };
 };
 
@@ -52,7 +52,7 @@ describe("URL construction", () => {
 
   it("honours a custom base URL without doubling the slash", async () => {
     const fetchMock = vi.fn(async () => jsonResponse(okEnvelope([])));
-    const client = new FakeNamely({
+    const client = new Fakenamely({
       baseUrl: "https://example.test/",
       fetch: fetchMock as unknown as typeof fetch,
     });
@@ -105,7 +105,7 @@ describe("responses", () => {
     const fetchMock = vi.fn(
       async () => new Response("fullName,city\nAda L. Byron,Columbus\n", { status: 200 }),
     );
-    const client = new FakeNamely({ fetch: fetchMock as unknown as typeof fetch });
+    const client = new Fakenamely({ fetch: fetchMock as unknown as typeof fetch });
 
     const csv = await client.export("identity", { format: "csv", count: 1 });
 
@@ -122,7 +122,7 @@ describe("errors", () => {
     );
 
     await expect(client.field({ type: "nope" as never })).rejects.toMatchObject({
-      name: "FakeNamelyError",
+      name: "FakenamelyError",
       status: 400,
       endpoint: "field",
     });
@@ -131,7 +131,7 @@ describe("errors", () => {
   it("rejects an out-of-range count before spending a request on it", async () => {
     const { client, fetchMock } = stub(okEnvelope([]));
 
-    await expect(client.identity({ count: 500 })).rejects.toBeInstanceOf(FakeNamelyError);
+    await expect(client.identity({ count: 500 })).rejects.toBeInstanceOf(FakenamelyError);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -141,14 +141,14 @@ describe("errors", () => {
     await client.imei({ count: 1000 });
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
-    await expect(client.address({ count: 1000 })).rejects.toBeInstanceOf(FakeNamelyError);
+    await expect(client.address({ count: 1000 })).rejects.toBeInstanceOf(FakenamelyError);
   });
 
   it("reports a transport failure as status 0, so it is distinguishable from a 400", async () => {
     const fetchMock = vi.fn(async () => {
       throw new Error("getaddrinfo ENOTFOUND");
     });
-    const client = new FakeNamely({ fetch: fetchMock as unknown as typeof fetch });
+    const client = new Fakenamely({ fetch: fetchMock as unknown as typeof fetch });
 
     await expect(client.name({})).rejects.toMatchObject({ status: 0 });
   });

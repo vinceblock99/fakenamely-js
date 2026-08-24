@@ -37,13 +37,13 @@ const MAX_COUNT: Readonly<Record<string, number>> = {
  * response, a transport failure. `status` is 0 when the request never reached
  * the server, so a caller can tell a network problem from a 400.
  */
-export class FakeNamelyError extends Error {
+export class FakenamelyError extends Error {
   readonly status: number;
   readonly endpoint: string;
 
   constructor(message: string, status: number, endpoint: string) {
     super(message);
-    this.name = "FakeNamelyError";
+    this.name = "FakenamelyError";
     this.status = status;
     this.endpoint = endpoint;
   }
@@ -61,7 +61,7 @@ export interface ClientOptions {
 }
 
 /**
- * Client for the FakeName Generator API — fictional identities, addresses and
+ * Client for the Fakenamely API — fictional identities, addresses and
  * names for tests, fixtures and demos.
  *
  * No API key exists to pass: the service is keyless and CORS-open, so this
@@ -71,7 +71,7 @@ export interface ClientOptions {
  * seed and parameters always return byte-identical records, so a fixture can be
  * fetched once, committed, and regenerated exactly when it needs to change.
  */
-export class FakeNamely {
+export class Fakenamely {
   private readonly baseUrl: string;
   private readonly timeoutMs: number;
   private readonly fetchImpl: typeof globalThis.fetch;
@@ -82,7 +82,7 @@ export class FakeNamely {
     this.timeoutMs = options.timeoutMs ?? 15_000;
     const impl = options.fetch ?? globalThis.fetch;
     if (typeof impl !== "function") {
-      throw new FakeNamelyError(
+      throw new FakenamelyError(
         "No fetch implementation found. Use Node 18+, or pass one as options.fetch.",
         0,
         "constructor",
@@ -153,7 +153,7 @@ export class FakeNamely {
     const response = await this.send(endpoint, params);
     const text = await response.text();
     if (!response.ok) {
-      throw new FakeNamelyError(text.slice(0, 300), response.status, endpoint);
+      throw new FakenamelyError(text.slice(0, 300), response.status, endpoint);
     }
     return text;
   }
@@ -175,7 +175,7 @@ export class FakeNamely {
     try {
       body = (await response.json()) as ApiEnvelope<T>;
     } catch {
-      throw new FakeNamelyError(
+      throw new FakenamelyError(
         `Expected JSON from /api/v1/${endpoint}, got ${response.status} ${response.statusText}.`,
         response.status,
         endpoint,
@@ -183,7 +183,7 @@ export class FakeNamely {
     }
 
     if (!response.ok || !body.success || body.data === null) {
-      throw new FakeNamelyError(
+      throw new FakenamelyError(
         body.error ?? `Request to /api/v1/${endpoint} failed with ${response.status}.`,
         response.status,
         endpoint,
@@ -210,7 +210,7 @@ export class FakeNamely {
     if (count === undefined) return;
     const max = MAX_COUNT[endpoint] ?? 100;
     if (!Number.isInteger(count) || (count as number) < 1 || (count as number) > max) {
-      throw new FakeNamelyError(
+      throw new FakenamelyError(
         `count must be an integer between 1 and ${max} for /${endpoint} (received ${String(count)}). For larger sets use the bulk exporter at ${this.baseUrl}/bulk.`,
         0,
         endpoint,
@@ -239,7 +239,7 @@ export class FakeNamely {
     })
       .catch((cause: unknown) => {
         const reason = cause instanceof Error ? cause.message : String(cause);
-        throw new FakeNamelyError(
+        throw new FakenamelyError(
           `Request to /api/v1/${endpoint} did not complete: ${reason}`,
           0,
           endpoint,
@@ -250,5 +250,5 @@ export class FakeNamely {
 }
 
 /** Convenience factory for callers who would rather not write `new`. */
-export const createClient = (options?: ClientOptions): FakeNamely =>
-  new FakeNamely(options);
+export const createClient = (options?: ClientOptions): Fakenamely =>
+  new Fakenamely(options);

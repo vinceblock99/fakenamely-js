@@ -1,20 +1,17 @@
 # fakenamely
 
-Official JavaScript/TypeScript client and CLI for the [FakeName Generator API](https://fakenamely.com/api) — free, keyless, CORS-open fictional identities, addresses and names for tests, fixtures and demos.
+Official JavaScript/TypeScript client and CLI for the [Fakenamely API](https://fakenamely.com/api) — free, keyless, CORS-open fictional identities, addresses and names for tests, fixtures and demos.
 
 No account, no API key, no rate-limit dashboard to check. It is a GET request.
 
 ```bash
-npm install github:vinceblock99/fakenamely-js
+npm install fakenamely
 ```
 
-The npm release is pending; until then install straight from GitHub — the
-`prepare` script builds it on install. Everything below works either way.
-
 ```ts
-import { FakeNamely } from "fakenamely";
+import { Fakenamely } from "fakenamely";
 
-const fn = new FakeNamely();
+const fn = new Fakenamely();
 
 // A committable fixture: the same seed always returns the same records.
 const users = await fn.identity({ count: 25, country: "de", seed: "checkout-suite-v3" });
@@ -26,10 +23,10 @@ const addresses = await fn.address({ state: "CA", count: 10 });
 const names = await fn.name({ country: "jp", count: 10 });
 ```
 
-Or from the terminal — straight from GitHub with `npx`, or as `fakenamely` once it is a dependency:
+Or from the terminal — one-off with `npx`, or as `fakenamely` once it is a dependency:
 
 ```bash
-npx github:vinceblock99/fakenamely-js name --country jp --count 10
+npx fakenamely name --country jp --count 10
 
 fakenamely address --state CA --count 5 --format csv > addresses.csv
 fakenamely identity --seed checkout-suite-v3 --count 3 > fixtures.json
@@ -90,15 +87,15 @@ It is not for identity verification or KYC, not for shipping or billing, not for
 
 ## Errors
 
-Every failure raises a `FakeNamelyError` carrying the server's own message, the HTTP `status` and the `endpoint`. A `status` of `0` means the request never reached the server — a bad parameter caught locally, or a transport failure — so a network problem is distinguishable from a rejected request.
+Every failure raises a `FakenamelyError` carrying the server's own message, the HTTP `status` and the `endpoint`. A `status` of `0` means the request never reached the server — a bad parameter caught locally, or a transport failure — so a network problem is distinguishable from a rejected request.
 
 ```ts
-import { FakeNamely, FakeNamelyError } from "fakenamely";
+import { Fakenamely, FakenamelyError } from "fakenamely";
 
 try {
   await fn.identity({ count: 500 });
 } catch (error) {
-  if (error instanceof FakeNamelyError) {
+  if (error instanceof FakenamelyError) {
     console.error(error.status, error.message);
   }
 }
@@ -109,7 +106,7 @@ try {
 Node 18+, Deno, Bun, browsers and edge runtimes. The client uses the global `fetch` and ships no dependencies; pass your own implementation as `options.fetch` if you need to.
 
 ```ts
-const fn = new FakeNamely({
+const fn = new Fakenamely({
   baseUrl: "https://fakenamely.com", // default
   timeoutMs: 15_000,                 // default
 });

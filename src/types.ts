@@ -1,5 +1,5 @@
 /**
- * Response shapes for the FakeName Generator API.
+ * Response shapes for the Fakenamely API.
  *
  * These are written against the published OpenAPI document at
  * https://fakenamely.com/api/openapi.json and verified against live responses.
