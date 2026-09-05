@@ -1,7 +1,7 @@
 {
   "name": "fakenamely",
   "version": "0.1.0",
-  "description": "Official client for the Fakenamely API \u2014 free, keyless fictional identities, addresses and names for tests, fixtures and demos.",
+  "description": "Official client for the Fakenamely API — free, keyless fictional identities, addresses and names for tests, fixtures and demos.",
   "keywords": [
     "test-data",
     "fake-data",
@@ -34,7 +34,7 @@
     }
   },
   "bin": {
-    "fakenamely": "./dist/cli.js"
+    "fakenamely": "dist/cli.js"
   },
   "files": [
     "dist",
