@@ -1,5 +1,7 @@
 # fakenamely
 
+[![npm](https://img.shields.io/npm/v/fakenamely.svg)](https://www.npmjs.com/package/fakenamely) [![CI](https://github.com/vinceblock99/fakenamely-js/actions/workflows/ci.yml/badge.svg)](https://github.com/vinceblock99/fakenamely-js/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![API docs](https://img.shields.io/badge/API-docs-1e3a8a)](https://fakenamely.com/api)
+
 Official JavaScript/TypeScript client and CLI for the [Fakenamely API](https://fakenamely.com/api) — free, keyless, CORS-open fictional identities, addresses and names for tests, fixtures and demos.
 
 No account, no API key, no rate-limit dashboard to check. It is a GET request.
@@ -66,6 +68,17 @@ console.log(meta?.seed); // pass this next time to get the same ten back
 Common parameters: `count` (1–100; `imei` allows 1–1000), `seed`, `country` (slug or ISO 3166-1 alpha-2), `gender`, `state` (US only). 38 countries are supported.
 
 Larger sets come from the [bulk exporter](https://fakenamely.com/bulk), which writes up to 100,000 rows as CSV, JSON or SQL.
+
+## The data behind the API
+
+The generator is measured, and the measurements are published. Each of these is a data post with charts you may reuse under CC BY 4.0 with a link back:
+
+- [Email addresses that break software](https://fakenamely.com/blog/email-addresses-that-break-software) — 32 edge-case addresses run through 8 validators (HTML5, Zod 3/4, validator.js, Angular, Python email-validator, two regexes): they split on 19; the 1,438 IANA TLDs by length (769 are longer than four characters); why every address from this API is at an RFC 2606 domain with a null MX.
+
+  ![Eight validators scored on 28 RFC 5321 edge cases](https://fakenamely.com/blog/figures/email-addresses-that-break-software/email-validator-scorecard-2026.webp)
+
+- [US ZIP code statistics](https://fakenamely.com/blog/us-zip-code-statistics) — 40,977 ZIP codes, 911 prefixes, the five that cross state lines: the dataset the `address` endpoint's state-valid ZIPs come from.
+- [Phone numbers that break software](https://fakenamely.com/blog/phone-numbers-that-break-software) — trunk prefixes, E.164 and the 555-01XX fiction range every `phone` value uses.
 
 ## What the data actually is
 
